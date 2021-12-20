@@ -56,6 +56,8 @@ class VAE(keras.Model):
         self.fc1 = layers.Dense(128)
         self.fc2 = layers.Dense(z_dim) # get mean prediction
         self.fc3 = layers.Dense(z_dim)
+        # 此处fc2与fc3并不是链式连接，fc1与fc2连接，fc1与fc3连接，也就是形成了一个分支连接。
+        # 且fc2层是做均值预测，fc3层是做方差预测。        
 
         # Decoder
         self.fc4 = layers.Dense(128)
