@@ -68,7 +68,7 @@ class VAE(keras.Model):
         mu = self.fc2(h)
         # get variance
         log_var = self.fc3(h)
-
+        # 如果是普通的variance的话，那么结果范围在[0,+无穷];log_var将结果范围扩展到了[负无穷，正无穷] 
         return mu, log_var
 
     def decoder(self, z):
