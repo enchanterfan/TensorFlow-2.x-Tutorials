@@ -13,6 +13,7 @@ class Generator(keras.Model):
         super(Generator, self).__init__()
 
         # z: [b, 100] => [b, 3*3*512] => [b, 3, 3, 512] => [b, 64, 64, 3]
+#         全连接层将维度从100升到512。然后将channel降低，feature_size慢慢升高。
         self.fc = layers.Dense(3*3*512)
         # 参数分别是channel个数，kernel_size，stride，padding方式‘valid’ 
         self.conv1 = layers.Conv2DTranspose(256, 3, 3, 'valid')
