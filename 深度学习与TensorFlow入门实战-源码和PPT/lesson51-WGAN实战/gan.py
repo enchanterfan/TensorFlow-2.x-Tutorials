@@ -14,7 +14,7 @@ class Generator(keras.Model):
 
         # z: [b, 100] => [b, 3*3*512] => [b, 3, 3, 512] => [b, 64, 64, 3]
         self.fc = layers.Dense(3*3*512)
-
+        # 参数分别是卷积核个数，kernel_size，stride，‘valid’ 
         self.conv1 = layers.Conv2DTranspose(256, 3, 3, 'valid')
         self.bn1 = layers.BatchNormalization()
 
