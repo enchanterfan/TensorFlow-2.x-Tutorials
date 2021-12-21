@@ -20,7 +20,7 @@ class Generator(keras.Model):
 
         self.conv2 = layers.Conv2DTranspose(128, 5, 2, 'valid')
         self.bn2 = layers.BatchNormalization()
-
+        # 这里的channel设置为3，因为输出是RGB三个通道。         
         self.conv3 = layers.Conv2DTranspose(3, 4, 3, 'valid')
 
     def call(self, inputs, training=None):
