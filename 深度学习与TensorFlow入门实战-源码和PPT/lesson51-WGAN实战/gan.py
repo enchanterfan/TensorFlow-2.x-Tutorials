@@ -14,7 +14,7 @@ class Generator(keras.Model):
 
         # z: [b, 100] => [b, 3*3*512] => [b, 3, 3, 512] => [b, 64, 64, 3]
         self.fc = layers.Dense(3*3*512)
-        # 参数分别是卷积核个数，kernel_size，stride，‘valid’ 
+        # 参数分别是channel个数，kernel_size，stride，padding方式‘valid’ 
         self.conv1 = layers.Conv2DTranspose(256, 3, 3, 'valid')
         self.bn1 = layers.BatchNormalization()
 
@@ -45,7 +45,7 @@ class Discriminator(keras.Model):
 
         # [b, 64, 64, 3] => [b, 1]
         self.conv1 = layers.Conv2D(64, 5, 3, 'valid')
-
+        # 参数分别是卷积核个数，kernel_size，stride，padding方式‘valid’ 
         self.conv2 = layers.Conv2D(128, 5, 3, 'valid')
         self.bn2 = layers.BatchNormalization()
 
