@@ -104,7 +104,7 @@ def main():
           tf.reduce_min(sample).numpy())
     dataset = dataset.repeat()
     db_iter = iter(dataset)
-
+    # db_iter = iter(dataset)本意是只将dataset迭代一次，但是dataset = dataset.repeat()决定了只要当前的dataset迭代完，就继续往深处迭代，直到整个dataset真正的迭代完为止。
 
     generator = Generator()
     generator.build(input_shape = (None, z_dim))
