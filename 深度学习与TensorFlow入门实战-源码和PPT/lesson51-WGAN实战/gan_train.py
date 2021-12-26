@@ -46,6 +46,7 @@ def celoss_ones(logits):
     # [b] = [1, 1, 1, 1,]
     loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=logits,
                                                    labels=tf.ones_like(logits))
+    # 此处的logits并不是真实的logits，而是我们自己指定的模拟的，所以这个标签全都是1，即假定全部都是送的真的。     
     return tf.reduce_mean(loss)
 
 
@@ -54,6 +55,7 @@ def celoss_zeros(logits):
     # [b] = [1, 1, 1, 1,]
     loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=logits,
                                                    labels=tf.zeros_like(logits))
+    # 此处是人为模拟的全部送的都是假的图片的loss，默认所有label都是0。    
     return tf.reduce_mean(loss)
 
 def d_loss_fn(generator, discriminator, batch_z, batch_x, is_training):
@@ -67,7 +69,7 @@ def d_loss_fn(generator, discriminator, batch_z, batch_x, is_training):
     d_loss_fake = celoss_zeros(d_fake_logits)
 
     loss = d_loss_fake + d_loss_real
-
+    # 总的loss等于判别器对真的loss加上判别器对假的loss。 
     return loss
 
 
@@ -76,7 +78,7 @@ def g_loss_fn(generator, discriminator, batch_z, is_training):
     fake_image = generator(batch_z, is_training)
     d_fake_logits = discriminator(fake_image, is_training)
     loss = celoss_ones(d_fake_logits)
-
+    # 生成器的loss主要任务是尽可能的骗过鉴别器，所以会希望d_fake_logits尽可能的大，而celoss_ones(d_fake_logits)尽可能的小，即分类结果为1的损失率尽可能小。
     return loss
 
 def main():
@@ -123,6 +125,7 @@ def main():
         with tf.GradientTape() as tape:
             d_loss = d_loss_fn(generator, discriminator, batch_z, batch_x, is_training)
         grads = tape.gradient(d_loss, discriminator.trainable_variables)
+        # 鉴别器的loss是为了尽可能的识别出假的图片，尽可能的将其识别为0。         
         d_optimizer.apply_gradients(zip(grads, discriminator.trainable_variables))
 
 
@@ -130,6 +133,7 @@ def main():
         with tf.GradientTape() as tape:
             g_loss = g_loss_fn(generator, discriminator, batch_z, is_training)
         grads = tape.gradient(g_loss, generator.trainable_variables)
+        # 生成器的loss是为了尽可能的骗过鉴别器，让其识别为1         
         g_optimizer.apply_gradients(zip(grads, generator.trainable_variables))
 
         if epoch % 100 == 0:
